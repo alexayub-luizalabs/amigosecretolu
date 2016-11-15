@@ -1,0 +1,12 @@
+{
+  "name": "AmigoSecretoLu",
+  "version": "1.0.0",
+  "description": "App de amigo secreto Magazine Luiza",
+  "author": "Alex Ayub",
+  "license": "Pode passar",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "mysql": "^2.9.0"
+  }
+}

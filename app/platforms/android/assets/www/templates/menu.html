@@ -1,0 +1,68 @@
+<ion-side-menus enable-menu-with-back-views="false">
+    <ion-side-menu-content>
+
+        <ion-nav-bar class="bar-positive">
+            <ion-nav-back-button class="button-clear">
+                <i class="ion-chevron-left"></i>&nbsp;&nbsp;Voltar
+            </ion-nav-back-button>
+            <ion-nav-buttons side="left">
+                <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+
+        <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+
+    </ion-side-menu-content>
+    <!-- Conteúdo do menu -->
+    <ion-side-menu side="left">
+        <ion-content padding="false" class="side-menu-left">
+
+            <!-- Cabeçalho do menu -->
+            <div class="row cabecalho-menu">
+                <div class="col">
+                    <div class="info-posicao">
+                         <img class="full-image space-bottom" src="img/logo-amigo-secreto_2.png">
+                            
+                        <br>
+                        <!-- Colocar imagem do usuário -->
+                        <div class="item item-avatar bg-pessoa">
+                            <p style="font-size:16px;font-weight:bold;">Seja bem-vindo!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fim - Cabeçalho do menu -->
+
+            <!-- Lista de itens do menu -->
+            <ion-list>
+                <ion-item class="item-icon-right" href="#/menu/perfil" menu-close>
+                    Meu Perfil
+                    <i class="icon ion-android-contact"></i>
+                </ion-item>
+                <ion-item class="item-icon-right" href="#/menu/grupos" menu-close>
+                    Grupos
+                    <i class="icon ion-android-list"></i>
+                </ion-item>
+                <ion-item class="item-icon-right" href="#/menu/produtos" menu-close>
+                    Produtos
+                    <i class="icon ion-ios-pricetag"></i>
+                </ion-item>
+                <ion-item class="item-icon-right" href="#/menu/mensagens" menu-close>
+                    Mensagens
+                    <i class="icon ion-email"></i>
+                </ion-item>
+                <ion-item class="item-icon-right" href="#/menu/sobre" menu-close>
+                    Sobre
+                    <i class="icon ion-information-circled"></i>
+                </ion-item>
+                <ion-item class="item-icon-right" href="#/login" menu-close>
+                    Sair
+                    <i class="icon ion-android-exit"></i>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+        <!-- Fim - Lista de itens do menu -->
+
+    </ion-side-menu>
+    <!-- Fim - Conteúdo do menu -->
+</ion-side-menus>

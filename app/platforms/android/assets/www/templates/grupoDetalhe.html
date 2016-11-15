@@ -1,0 +1,28 @@
+<ion-view title="Detalhes do Grupo">
+    <ion-nav-buttons side="right">
+        
+    </ion-nav-buttons>
+    <ion-content padding="true" class="has-header bg-padrao">
+        <br>        
+        
+        <input type="search" placeholder="Nome do grupo" id='txtPesq' ng-model="nomeGrupo">
+        <input type="button" value='Novo Grupo' class="has-header bg-padrao" ng-show="nomeGrupo != ''" ng-click="criarGrupo(nomeGrupo)">
+
+        </br>
+        <ion-list can-swipe="true">            
+            <ion-item class="item-thumbnail-left positive" ng-repeat="grupo in vm.grupos" class="item-button-right">
+                <h2>{{grupo.nome}}</h2>
+                <p>{{grupo.datacriacao}}</p>
+                <br/>
+                <i style="float:right" class="icon ion-chevron-right icon-accessory balanced">  </i>
+
+                <i class="icon ion-checkmark-circled balanced" ng-hide="!produto.added"></i>
+                <ion-option-button class="button-positive" ng-click="getMembros({{grupo.idgrupo}})">
+                    Membros
+                </ion-option-button>
+                
+            </ion-item>
+        </ion-list>        
+    </ion-content>
+</ion-view>
+<i class="icon ion-chevron-right icon-accessory"></i>

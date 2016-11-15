@@ -1,0 +1,12 @@
+<ion-view title="Membros" id="page12">
+  <ion-content padding="true" class="has-header">
+  <center><h3>{{nomeGrupo}}</h3></center>
+    <ion-list id="membros-list11" ng-repeat="membro in vm.membros">
+      <ion-item class="item-avatar item-icon-right" id="membros-list-item12" src="foto">
+        <h2>{{membro.nome}}</h2>
+        <i class="icon ion-email" ng-click="enviarMsg(membro.idamigo)"></i>
+        <ion-option-button class="button-assertive" ng-click="removerMembro(membro.idamigo)">Remover</ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

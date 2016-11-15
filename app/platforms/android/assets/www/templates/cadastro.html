@@ -1,0 +1,33 @@
+<ion-view view-title="Cadastre-se">
+    <ion-content padding="true" class="bg-padrao">
+        <!-- Logo Quero de Casamento -->
+        <div class="logo">
+            <img class="full-image" src="img/logo-amigo-secreto.png">
+        </div>
+        <!-- Fim - Quero Lista de Casamento -->
+        <!-- Campos de login -->
+        <div class="list" ng-app="app" ng-controller="cadastroCtrl">
+                <label class="item item-input item-stacked-label input-login">
+                    <span class="input-label">E-mail</span>
+                    <input type="text" placeholder="exemplo@exemplo.com.br" ng-model="email">
+                </label>
+                <label class="item item-input item-stacked-label input-login">
+                    <span class="input-label">Senha</span>
+                    <input type="password" placeholder="Informe sua senha" ng-model="senha">
+                </label>
+                <label class="item item-input item-stacked-label input-login">
+                    <span class="input-label">Nome</span>
+                    <input type="text" placeholder="Seu nome" ng-model="nome">
+                </label>
+                <label class="item item-input item-stacked-label input-login">
+                    <span class="input-label">Celular</span>
+                    <input type="text" placeholder="(XX) XXXXX-XXXX" ng-model="celular">
+                </label>
+        
+                <button class="button button-block button-assertive" ng-click="cadastrar()">Cadastre-se</button>
+        </div>
+        <!-- Fim - Campos de login -->
+        
+        
+    </ion-content>
+</ion-view>

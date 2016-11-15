@@ -1,0 +1,16 @@
+<ion-view title="Membros" id="page12">
+  <ion-content padding="true" class="has-header">  
+  	<form id="produtos-form6" class="list">
+      <label class="item item-input" id="produtos-textarea2" name="telefones">Digite o celular ou email, separados por vírgula:
+        <span class="input-label"></span><input type="text" ng-model="telefones"></label>
+    </form>
+    <button id="grupos-button4" class="button button-positive  button-block" ng-click="convidar(telefones)" ng-show="telefones!=''">Enviar Convite</button>
+    <ion-list id="membros-list11">
+      <ion-item class="item-avatar item-icon-right" id="membros-list-item12" ng-repeat="m in vm.membros">
+        <h2>{{m.nome}} - {{m.celular}}</h2>
+        <i class="icon ion-email"></i>
+        <ion-option-button class="button-assertive">Remover do grupo</ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
