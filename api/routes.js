@@ -56,8 +56,8 @@ module.exports = {
       membro.update(req.params.idgrupo, req.params.celular, res);
     });
 
-    app.delete('/membros/:idg/grupo/:idm', function(req, res) {
-      membro.delete(req.params.idg, req.params.idm, res);
+    app.delete('/membros/:idg/grupo/:celular', function(req, res) {
+      membro.delete(req.params.idg, req.params.celular, res);
     });
 
 
@@ -89,14 +89,6 @@ module.exports = {
 
     app.get('/grupos/:id/amigo', function(req, res) {
       grupo.getGruposPorAmigo(req.params.id,res);
-    });
-
-    app.get('/grupos/:id/uf', function(req, res) {
-      city.getGruposPorUf(req.params.id,res);
-    });
-
-    app.get('/grupos/:id/cidade', function(req, res) {
-      city.getGruposPorCidade(req.params.id,res);
     });
     
     app.post('/grupos/', function(req, res) {

@@ -30,7 +30,7 @@ function Membro() {
   
   this.getMembrosPorGrupo = function(id, res) {
     connection.acquire(function(err, con) {
-      con.query('select g.nome as grupo, a.idamigo, a.nome, a.celular, a.foto from amigos_grupos ag, amigos a, grupos g where a.idamigo = ag.idamigo and g.idgrupo = ag.idgrupo and g.idgrupo = ?',[id], function(err, result) {
+      con.query("select g.nome as grupo, case g.idadmin when a.idamigo then 'S' else 'N' END as isadmin , a.idamigo, a.nome, a.celular, a.foto from amigos_grupos ag, amigos a, grupos g where a.celular = ag.celular and g.idgrupo = ag.idgrupo and g.idgrupo = ?",[id], function(err, result) {
         con.release();
         if(err) {
           res.send({status: 1, message: 'Users not found in this place.'});
@@ -45,9 +45,9 @@ function Membro() {
     });
   };
 
-  this.delete = function(idg, idm, res) {
+  this.delete = function(idg, celular, res) {
     connection.acquire(function(err, con) {
-      con.query('call p_desassociar(?,?,@resultado)', [idg,idm], function(err, result) {
+      con.query('call p_desassociar(?,?,@resultado)', [idg,celular], function(err, result) {
         con.release();
         if (err) {
           res.send({status: 1, message: 'Falha ao desassociar amigo'});

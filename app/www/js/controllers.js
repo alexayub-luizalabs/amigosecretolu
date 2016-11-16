@@ -197,7 +197,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
                         'Cache-Control': 'no-cache'
                     }*/
                     data: {
-                        idcriador: $rootScope.usuarioLogado,
+                        idadmin: $rootScope.usuarioLogado,
                         nome: $scope.nomeGrupo
                     }
                 }
@@ -588,8 +588,11 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
 
     $scope.idGrupo = $location.search().idGrp;
-    $scope.telefones = '';
+    $scope.txtFone = '';
 
+    $scope.valMinimo = 0;
+    $scope.valMaximo = 5000;
+    
 	$scope.nomeGrupo = '';
         $scope.vm = {            
             membros: []
@@ -609,6 +612,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
             $scope.nomeGrupo = item.grupo;
             $rootScope.nomeGrupo = item.grupo;    
             $scope.vm.membros.push({
+                            isadmin: item.isadmin,
                             idamigo: item.idamigo,
                             nome: item.nome,
                             celular: item.celular,
@@ -621,11 +625,66 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
             console.log(error);
         })
 
+        $scope.validarValorMin = function (valor) {
+            if(valor >= $scope.valMaximo) {
+                $scope.valMinimo = $scope.valMaximo - 10;
+            } else {
+                $scope.valMinimo = valor
+            }
+        }
+
+        $scope.validarValorMax = function (valor) {
+            if(valor <= $scope.valMinimo) {
+                $scope.valMaximo = $scope.valMinimo + 10;
+            } else {
+                $scope.valMaximo = valor
+            }
+        }
+
+        $scope.delMembro = function (celular) {
+                
+            $scope.celular = celular;
+
+            var req = {
+                method: 'DELETE',
+                url: 'http://localhost:8080/membros/' + $location.search().idGrp + '/grupo/' + $scope.celular 
+            };
+
+            $http(req).then(function (result) {
+                if (result.data.message[0].resultado == 'OK') {
+                    $ionicPopup.alert({
+                        title: 'Amigo Secreto da Lu',
+                        template: 'Usuário Cadastrado com sucesso'
+                    }).then(function (res) {  
+                        location.href = '#/templates/login.html';
+                    });
+                } else {
+                    $ionicPopup.alert({
+                        title: 'Amigos da Lu',
+                        template: result.data.message[0].resultado
+                    })
+                }
+                
+            }, function (error) {
+                if (error.status === 404) {
+                    $ionicPopup.alert({
+                        title: 'Cadastro erro',
+                        template: 'Ocorreu algum erro'
+                    });
+                } else {
+                    $ionicPopup.alert({
+                        title: 'Cadastro Erro',
+                        template: 'Ocorreu algum erro (' + error.status + ')'
+                    });
+                }
+            });
+            
+        }
+
         //Envia SMS para os telefones
         $scope.convidar = function(telefones) {
-             //TODO: pegar o telefone do cliente
-             $scope.url = "http://192.168.50.96:8080/grupos/";
              
+             //TODO: pegar o telefone do cliente             
              var celMail = telefones.split(',');
 
              celMail.forEach(function (tel) {
@@ -636,7 +695,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
                     var data = { 
                          "from": "Amigo Secreto da Lu", 
                          "to": telefone,
-                         "text":"Você foi convidado a entrar no grupo " + $rootScope.nomeGrupo + ". Para entrar, acesse o link: " + $scope.url 
+                         "text":"Você foi convidado a entrar no grupo " + $rootScope.nomeGrupo + ". Amigo secreto da Lu." 
                         };
                      $http.post(
                          'https://api.infobip.com/sms/1/text/single',
@@ -650,9 +709,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
                      ).success(function (data) {
                          console.log(data);
                      });    
-                } else { //é email
-                    //Enviar email com mesmo texto e link para baixar o app
-                }                    
+                }                
 
              });
 
