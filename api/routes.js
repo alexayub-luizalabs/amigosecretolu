@@ -23,6 +23,10 @@ module.exports = {
       amigo.getAmigoPorId(req.params.id,res);
     });
 
+    app.get('/amigos/:cel/celular', function(req, res) {
+      amigo.getAmigoPorCelular(req.params.cel,res);
+    });
+
     app.get('/amigos/:id/grupo', function(req, res) {
       amigo.getAmigosPorGrupo(req.params.id,res);
     });

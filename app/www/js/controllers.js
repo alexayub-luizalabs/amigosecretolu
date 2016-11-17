@@ -135,12 +135,13 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
     $http(req).then(function (result) {
         result.data.forEach(function (item) {                
         $scope.vm.grupos.push({
+                        isadmin: item.idadmin == $rootScope.usuarioLogado,
                         idgrupo: item.idgrupo,
                         nome: item.nome,
                         data: item.datacriacao
                     });
     });
-        console.log(result);
+        
 
     }, function (error) {
         console.log(error);
@@ -166,6 +167,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
         $http(req).then(function (result) {
             result.data.forEach(function (item) {                
             $scope.vm.grupos.push({
+                            isadmin: item.idadmin == $rootScope.usuarioLogado,
                             idgrupo: item.idgrupo,
                             nome: item.nome,
                             data: item.datacriacao
@@ -475,7 +477,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
 
 	$rootScope.usuarioLogado = 0;
-	$scope.usuario =  'alex.ayub@luizalabs.com';
+	$scope.usuario =  'alexayub@gmail.com';
     $scope.password = '123';
 
     $scope.entrar = function (usuario, password) {
@@ -625,6 +627,38 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
             console.log(error);
         })
 
+        $scope.doRefresh = function() {
+
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:8080/membros/' +  $scope.idGrupo + '/grupo'/*,
+                headers: {
+                    'Authorization': 'Bearer pedrocao',
+                    'Cache-Control': 'no-cache'
+                }*/
+            }
+
+            $http(req).then(function (result) {
+                result.data.forEach(function (item) {
+                    $scope.nomeGrupo = item.grupo;
+                    $rootScope.nomeGrupo = item.grupo;    
+                    $scope.vm.membros.push({
+                        isadmin: item.isadmin,
+                        idamigo: item.idamigo,
+                        nome: item.nome,
+                        celular: item.celular,
+                        foto: item.foto,
+                        inserido: item.inserido
+                    });
+                });
+                console.log(result);
+
+            }, function (error) {
+                console.log(error);
+            })
+
+        }
+
         $scope.validarValorMin = function (valor) {
             if(valor >= $scope.valMaximo) {
                 $scope.valMinimo = $scope.valMaximo - 10;
@@ -697,7 +731,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
                          "to": telefone,
                          "text":"Você foi convidado a entrar no grupo " + $rootScope.nomeGrupo + ". Amigo secreto da Lu." 
                         };
-                     $http.post(
+                     /*$http.post(
                          'https://api.infobip.com/sms/1/text/single',
                          JSON.stringify(data),
                          {
@@ -708,10 +742,50 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
                          }
                      ).success(function (data) {
                          console.log(data);
-                     });    
-                }                
+                     });  */  
+                
+                     //verifica se a pessoa ja esta no app e adiciona aguardando confirmação
+                     var req = {
+                        method: 'GET',
+                        url: 'http://localhost:8080/amigos/' + tel + '/celular'/*,
+                        headers: {
+                            'Authorization': 'Bearer pedrocao',
+                            'Cache-Control': 'no-cache'
+                        },*/                        
+                    };
 
-             });
+                    $http(req).then(function (result) {
+                        result.data.forEach(function (item) {
+                            var req = {
+                                method: 'POST',
+                                url: 'http://localhost:8080/membros/',/*,
+                            headers: {
+                                'Authorization': 'Bearer pedrocao',
+                                'Cache-Control': 'no-cache'
+                            },*/
+                                data: {
+                                    idgrupo: $location.search().idGrp,
+                                    celular: item.celular
+                                }
+                            };
+
+                            $http(req).then(function (result) {
+                                $ionicPopup.alert({
+                                    title: 'Amigos da Lu',
+                                    template: 'Convite enviado com sucesso !'
+                                })                                    
+                            }, function (error) {
+                                console.log(error);
+                            });                 
+                        
+                        });
+                    }, function (error) {
+                            console.log(error);
+                    })
+
+                }
+
+            });
 
         };
 

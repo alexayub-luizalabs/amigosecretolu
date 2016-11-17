@@ -26,7 +26,24 @@ function Amigo() {
   
   this.getAmigoPorId = function(id, res) {
     connection.acquire(function(err, con) {
-      con.query("select a.idamigo, a.nome, a.senha, a.email, a.celular, a.dtcadastro, (select count(*) from amigos_grupos ag where ag.celular = a.celular) as qtdgrupo from amigos a where a.idamigo = ?",[id,id], function(err, result) {
+      con.query("select a.idamigo, a.nome, a.senha, a.email, a.celular, a.dtcadastro, (select count(*) from amigos_grupos ag where ag.celular = a.celular) as qtdgrupo from amigos a where a.idamigo = ?",[id], function(err, result) {
+        con.release();
+        if(err) {
+          res.send({status: 1, message: 'Amigo não encontrado.'});
+        } else {
+          if(result.length > 0) {
+            res.send(result);
+          } else {
+            res.send({status: 1, message: 'Amigo não encontrado.'});
+          }          
+        }
+      });
+    });
+  };
+
+  this.getAmigoPorCelular = function(cel, res) {
+    connection.acquire(function(err, con) {
+      con.query("select a.idamigo, a.nome, a.senha, a.email, a.celular, a.dtcadastro, (select count(*) from amigos_grupos ag where ag.celular = a.celular) as qtdgrupo from amigos a where a.celular = ?",[cel], function(err, result) {
         con.release();
         if(err) {
           res.send({status: 1, message: 'Amigo não encontrado.'});
