@@ -442,7 +442,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 	                    mostrar: false,
 	                    title: order.title,
                         price: order.price,
-                        url: 'http://www.magazineluiza.com.br/' + order.url,                        
+                        url: 'http://www.magazineluiza.com.br/' + order.url,
 	                    full_image: 'http://i.mlcdn.com.br/180x120/' + order.image
 	                });                        
 	        })
