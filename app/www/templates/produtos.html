@@ -8,10 +8,11 @@
     <ion-list id="produtos-list14" ng-repeat="prod in vm.produtos">
       <ion-item class="item-thumbnail-left item-icon-right positive" id="produtos-list-item26">
         <img src="{{prod.full_image}}">
-        <h2positive>{{prod.title}}
-          <i class="icon ion-ios-information-outline"></i>
+        <h2positive><a href="{{prod.url}}">{{prod.title}}</a>
+          <i class="icon ion-ios-information-outline"></i>          
           <ion-option-button class="button-positive" ng-click="exibeDiv(prod.divSku)">Eu Quero</ion-option-button>          
         </h2positive>
+        R$ {{prod.price}}
         {{grupo1.nome}}
         <div class="button-bar" id="{{prod.divSku}}" style="position: absolute;z-index: 150px;" ng-show="prod.mostrar">
           <button id="listaDePresentes-button10" class="button button-positive  button-block" ng-show="grupo1 != ''" ng-click="addItem(prod.divSku, grupo1.idgrupo)">{{grupo1[0].nome}}</button>

@@ -138,7 +138,8 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
                         isadmin: item.idadmin == $rootScope.usuarioLogado,
                         idgrupo: item.idgrupo,
                         nome: item.nome,
-                        data: item.datacriacao
+                        data: item.datacriacao,
+                        inserido: item.inserido
                     });
     });
         
@@ -170,13 +171,74 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
                             isadmin: item.idadmin == $rootScope.usuarioLogado,
                             idgrupo: item.idgrupo,
                             nome: item.nome,
-                            data: item.datacriacao
+                            data: item.datacriacao,
+                            inserido: item.inserido
                         });
         });
             console.log(result);
 
         }, function (error) {
             console.log(error);
+        })
+    }
+
+    $scope.aceitar = function (grupo) {
+        
+        $scope.grupo = grupo;
+        $scope.vm = {
+            grupos: []
+        };
+
+        var req = {
+            method: 'PUT',
+            url: 'http://localhost:8080/grupos/' + $scope.grupo + '/amigos/' + $rootScope.celularLogado + '/aceitar'/*,
+            headers: {
+                'Authorization': 'Bearer pedrocao',
+                'Cache-Control': 'no-cache'
+            }*/
+        }
+
+        $http(req).then(function (result) {
+            var confirmPopup = $ionicPopup.confirm({
+                    title: 'Amigos da Lu',
+                    template: result.data.message
+                });
+            $scope.doRefresh();
+        }, function (error) {
+            var confirmPopup = $ionicPopup.confirm({
+                    title: 'Amigos da Lu',
+                    template: error
+                });
+        })
+    }
+
+    $scope.cancelar = function (grupo) {
+        
+        $scope.grupo = grupo;
+        $scope.vm = {
+            grupos: []
+        };
+
+        var req = {
+            method: 'PUT',
+            url: 'http://localhost:8080/grupos/' + $scope.grupo + '/amigos/' + $rootScope.celularLogado + '/cancelar'/*,
+            headers: {
+                'Authorization': 'Bearer pedrocao',
+                'Cache-Control': 'no-cache'
+            }*/
+        }
+
+        $http(req).then(function (result) {
+            var confirmPopup = $ionicPopup.confirm({
+                    title: 'Amigos da Lu',
+                    template: result.data.message
+                });
+            $scope.doRefresh();
+        }, function (error) {
+            var confirmPopup = $ionicPopup.confirm({
+                    title: 'Amigos da Lu',
+                    template: error
+                });
         })
     }
 
@@ -379,6 +441,8 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 	                    divSku: 'div_' + order.id,
 	                    mostrar: false,
 	                    title: order.title,
+                        price: order.price,
+                        url: 'http://www.magazineluiza.com.br/' + order.url,                        
 	                    full_image: 'http://i.mlcdn.com.br/180x120/' + order.image
 	                });                        
 	        })
@@ -477,7 +541,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
 
 	$rootScope.usuarioLogado = 0;
-	$scope.usuario =  'alexayub@gmail.com';
+	$scope.usuario =  '';
     $scope.password = '123';
 
     $scope.entrar = function (usuario, password) {
@@ -495,13 +559,14 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
             };
 
             $http(req).then(function (result) {
-                 if(result.data[0].resultado == 'FAIL') {
+                 if(result.data.length <= 0) {
                     $ionicPopup.alert({
                         title: 'Amigos da Lu',
                         template: 'Login ou senha Inválidos'
                     });
                  } else {
-                    $rootScope.usuarioLogado =  result.data[0].resultado;
+                    $rootScope.usuarioLogado =  result.data[0].idamigo;
+                    $rootScope.celularLogado =  result.data[0].celular;
                     location.href="#/menu/perfil" ;   
                  }                         
             }, function (error) {
@@ -596,9 +661,10 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
     $scope.valMaximo = 5000;
     
 	$scope.nomeGrupo = '';
-        $scope.vm = {            
-            membros: []
-        };
+
+    $scope.vm = {            
+        membros: []
+    };
 
         var req = {
             method: 'GET',
@@ -618,7 +684,8 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
                             idamigo: item.idamigo,
                             nome: item.nome,
                             celular: item.celular,
-                            foto: item.foto
+                            foto: item.foto,
+                            inserido: item.inserido
                         });
         });
             console.log(result);
@@ -629,13 +696,17 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
 
         $scope.doRefresh = function() {
 
+            $scope.vm = {            
+                membros: []
+            };
+
             var req = {
                 method: 'GET',
                 url: 'http://localhost:8080/membros/' +  $scope.idGrupo + '/grupo'/*,
                 headers: {
                     'Authorization': 'Bearer pedrocao',
                     'Cache-Control': 'no-cache'
-                }*/
+                }*/ 
             }
 
             $http(req).then(function (result) {
@@ -685,33 +756,18 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
             };
 
             $http(req).then(function (result) {
-                if (result.data.message[0].resultado == 'OK') {
-                    $ionicPopup.alert({
-                        title: 'Amigo Secreto da Lu',
-                        template: 'Usuário Cadastrado com sucesso'
-                    }).then(function (res) {  
-                        location.href = '#/templates/login.html';
-                    });
-                } else {
-                    $ionicPopup.alert({
-                        title: 'Amigos da Lu',
-                        template: result.data.message[0].resultado
-                    })
-                }
-                
+                $ionicPopup.alert({
+                    title: 'Amigos da Lu',
+                    template: result.data.message
+                })                                
             }, function (error) {
-                if (error.status === 404) {
-                    $ionicPopup.alert({
-                        title: 'Cadastro erro',
-                        template: 'Ocorreu algum erro'
-                    });
-                } else {
-                    $ionicPopup.alert({
-                        title: 'Cadastro Erro',
-                        template: 'Ocorreu algum erro (' + error.status + ')'
-                    });
-                }
+                $ionicPopup.alert({
+                    title: 'Cadastro Erro',
+                    template: 'Ocorreu algum erro (' + error.status + ')'
+                });                
             });
+
+            $scope.doRefresh();
             
         }
 

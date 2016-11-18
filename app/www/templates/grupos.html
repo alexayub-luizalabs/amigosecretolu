@@ -8,7 +8,10 @@
     <ion-list id="grupos-list13">
       <ion-item class="item-thumbnail-left positive" id="grupos-list-item25" ng-repeat="grupo in vm.grupos">
         <h2positive>{{grupo.nome}}
-          <ion-option-button class="button-royal" ng-click="getMembros(grupo.idgrupo)">Participantes</ion-option-button>
+          <ion-option-button class="button-royal" ng-click="aceitar(grupo.idgrupo)" ng-show="grupo.inserido=='N'">Entrar</ion-option-button>
+          <ion-option-button class="button-assertive" ng-click="cancelar(grupo.idgrupo)" ng-show="grupo.inserido=='N'">Não Aceitar</ion-option-button>
+
+          <ion-option-button class="button-royal" ng-click="getMembros(grupo.idgrupo)" ng-show="grupo.inserido=='S'">Participantes</ion-option-button>
           <ion-option-button class="button-assertive" ng-click="delGrupo(grupo.idgrupo, grupo.nome)" ng-show="{{grupo.isadmin}}">Excluir</ion-option-button>
         </h2positive>
       </ion-item>

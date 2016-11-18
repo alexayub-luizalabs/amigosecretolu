@@ -13,7 +13,7 @@ function Grupo() {
 
   this.getGruposPorAmigo = function(id, res) {
     connection.acquire(function(err, con) {
-      con.query('select g.*, a.idamigo, a.nome as amigo from grupos g, amigos a, amigos_grupos ag where ag.idgrupo = g.idgrupo and ag.celular = a.celular and a.idamigo = ? order by g.nome',[id], function(err, result) {
+      con.query("select g.*, a.idamigo, a.nome as amigo, case ag.inserido is null when true then 'N' else 'S' end as inserido from grupos g, amigos a, amigos_grupos ag where ag.idgrupo = g.idgrupo and ag.celular = a.celular and a.idamigo = ? order by g.nome",[id], function(err, result) {
         con.release();
         if(err) {
           res.send({status: 1, message: 'Grupos não encontrados por amigo.'});
@@ -40,6 +40,32 @@ function Grupo() {
       });
     });
   };
+
+  this.aceitar = function(id, celular, res) {
+    connection.acquire(function(err, con) {
+      con.query('update amigos_grupos set inserido = now() where idgrupo = ? and celular = ?', [id,celular], function(err, result) {
+        con.release();
+        if (err) {
+          res.send({status: 1, message: 'Falha ao aceitar convite'});
+        } else {
+          res.send({status: 0, message: 'Convite aceito'});
+        }
+      });
+    });
+  };  
+
+  this.cancelar = function(id, celular, res) {
+    connection.acquire(function(err, con) {
+      con.query('delete from amigos_grupos where idgrupo = ? and celular = ?', [id,celular], function(err, result) {
+        con.release();
+        if (err) {
+          res.send({status: 1, message: 'Falha ao cancelar convite'});
+        } else {
+          res.send({status: 0, message: 'Convite cancelado'});
+        }
+      });
+    });
+  };  
 
   this.update = function(id, grupo, res) {
     connection.acquire(function(err, con) {

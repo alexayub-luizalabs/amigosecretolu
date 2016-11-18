@@ -99,6 +99,14 @@ module.exports = {
       grupo.create(req.body, res);
     });
 
+    app.put('/grupos/:id/amigos/:celular/cancelar', function(req, res) {
+      grupo.cancelar(req.params.id, req.params.celular, res);
+    });
+
+    app.put('/grupos/:id/amigos/:celular/aceitar', function(req, res) {
+      grupo.aceitar(req.params.id, req.params.celular, res);
+    });
+
     app.delete('/grupos/:id/', function(req, res) {
       grupo.delete(req.params.id, res);
     });

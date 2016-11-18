@@ -1,28 +1,34 @@
 <ion-view title="Membros" id="page12">
   <ion-nav-buttons side="left" class="has-header">
-    <button class="button button-icon icon ion-android-arrow-back"></button>
+    <button class="button button-icon icon ion-android-arrow-back" ui-sref="menu.grupos"></button>
   </ion-nav-buttons>
   <ion-content padding="true" class="has-header">
-  <center><h4>Regras</h4></center>
-    <ion-list id="membros-list11">
-      <ion-item class="range range-positive" id="membros-range3">Valor Mínimo
-        <input type="range" value="valMinimo" ng-model="valMinimo" min="0" max="5000" ng-change="validarValorMin(valMinimo)" step="10">{{valMinimo}}
-      </ion-item>
-      <ion-item class="range range-positive" id="membros-range2">Valor Máximo
-        <input type="range" value="valMaximo" ng-model="valMaximo" min="0" max="5000" ng-change="validarValorMax(valMaximo)" step="10">{{valMaximo}}
-      </ion-item>
-    </ion-list>
-    <center><h4>Convites</h4></center>
-    <button id="membros-button6" class="button button-positive  button-block" ng-show="txtFone!=''" ng-click="convidar(txtFone)">Convidar Amigos</button>
-    <label class="item item-input item-stacked-label" id="membros-input13">
-        <input type="text" placeholder="Digite os celulares com ddd separados por vírgula" ng-model="txtFone">
-    </label>
-    <center><h4>Quem está aqui</h4></center>
+  <div id="divRegras">
+    <center><h4>Regras</h4></center>
+      <ion-list id="membros-list11">
+        <ion-item class="range range-positive" id="membros-range3">Valor Mínimo
+          <input type="range" value="valMinimo" ng-model="valMinimo" min="0" max="5000" ng-change="validarValorMin(valMinimo)" step="10">{{valMinimo}}
+        </ion-item>
+        <ion-item class="range range-positive" id="membros-range2">Valor Máximo
+          <input type="range" value="valMaximo" ng-model="valMaximo" min="0" max="5000" ng-change="validarValorMax(valMaximo)" step="10">{{valMaximo}}
+        </ion-item>
+      </ion-list>
+    </div>
+    <div id="divConvites">
+      <center><h4>Convites</h4></center>
+      <button id="membros-button6" class="button button-positive  button-block" ng-show="txtFone!=''" ng-click="convidar(txtFone)">Convidar Amigos</button>
+      <label class="item item-input item-stacked-label" id="membros-input13">
+          <input type="text" placeholder="Digite os celulares com ddd separados por vírgula" ng-model="txtFone">
+      </label>
+    </div>
+    <center><h4>Estão neste grupo</h4></center>
     <ion-list id="membros-list12" ng-repeat="m in vm.membros">      
       <ion-item class="item-avatar item-icon-right" id="membros-list-item12">
-        <h2>{{m.nome}} <span style="color:red" id="spAdmin" ng-show="{{m.isadmin == 'S'}}"> (Admin)</span></h2>
+        <h2>{{m.nome}}</h2>
+        <h4><span style="color:red" id="spAdmin" ng-show="{{m.isadmin == 'S'}}"> (Admin)</span></h4>
+        <h4><span style="color:gray" id="spConfirma" ng-show="{{m.inserido == 'N'}}"> (Aguardando confirmação)</span></h4>
         <i class="icon ion-email"></i>
-        <ion-option-button class="button-assertive" ng-click="delMembro(m.celular)">Remover</ion-option-button>
+        <ion-option-button class="button-assertive" ng-click="delMembro(m.celular)" ng-show="{{m.isadmin == 'S'}}">Remover</ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>
