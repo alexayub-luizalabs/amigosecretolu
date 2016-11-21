@@ -1,14 +1,19 @@
 <ion-view title="Lista de Presentes" id="page13">
   <ion-content padding="true" class="has-header">
-    <div id="listaDePresentes-button-bar1" class="button-bar">
-      <button id="listaDePresentes-button10" class="button button-positive  button-block" ng-show="nomegrp1 != ''" ng-click="buscarLista(idgrp1)">{{nomegrp1}}</button>
-      <button id="listaDePresentes-button11" class="button button-positive  button-block" ng-show="nomegrp2 != ''" ng-click="buscarLista(idgrp2)">{{nomegrp2}}</button>
-      <button id="listaDePresentes-button12" class="button button-positive  button-block" ng-show="nomegrp3 != ''" ng-click="buscarLista(idgrp3)">{{nomegrp3}}</button>
-    </div>
-    <ion-list id="listaDePresentes-list17" ng-repeat="prod in vm.produtos">
-      <ion-item id="listaDePresentes-list-item21">{{prod.produto}}
-        <ion-option-button class="button-assertive">Excluir</ion-option-button>
-      </ion-item>      
+    <ion-list id="listaDePresentes-list15">
+      <label class="item item-select" id="listaDePresentes-select1" name="selGrupos">
+        <span class="input-label"></span>
+        <select  ng-model="grupoSelecionado" ng-change="buscarLista(grupoSelecionado);">
+          <option value="0">Selecione o grupo</option>
+          <option ng-repeat="grp in grp.grupos" ng-model="grupoSelecionado" value="{{grp.idgrupo}}">{{grp.nome}}</option>
+        </select>
+      </label>
+      <ion-item class="item-thumbnail-left positive" id="listaDePresentes-list-item13" ng-repeat="prod in vm.produtos">
+        <img src="{{prod.imagem}}">
+        <h2positive>{{prod.produto}}
+          <ion-option-button class="button-assertive" ng-click="delItem(prod.idpresente,prod.idgrupo)">Remover</ion-option-button>
+        </h2positive>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>

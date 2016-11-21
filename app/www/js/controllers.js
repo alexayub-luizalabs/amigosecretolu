@@ -320,41 +320,27 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 
-    $scope.idgrp1 = 0;
-    $scope.nomegrp1 = '';
+    $scope.grupoSelecionado = '0';
 
-    $scope.idgrp2 = 0;
-    $scope.nomegrp2 = '';
-
-    $scope.idgrp3 = 0;
-    $scope.nomegrp3 = '';
-    
+    $scope.grp = {
+        grupos: []
+    };
 
     //Busca os grupos que participa
     var req = {
         method: 'GET',
-        url: 'http://localhost:8080/grupos/' + '1' + '/amigo'/*,
+        url: 'http://localhost:8080/grupos/1/amigo'/*,
         headers: {
             'Authorization': 'Bearer pedrocao',s
             'Cache-Control': 'no-cache'
         }*/
     }
-
-    $http(req).then(function (result) {
-        var cont = 0;
+    $http(req).then(function (result) {     
         result.data.forEach(function (item) {                
-            if(cont == 0) {
-                $scope.idgrp1 = item.idgrupo;
-                $scope.nomegrp1 = item.nome;
-            } else if(cont == 1) {
-                $scope.idgrp2 = item.idgrupo;
-                $scope.nomegrp2 = item.nome;
-            } else {
-                $scope.idgrp3 = item.idgrupo;
-                $scope.nomegrp3 = item.nome;
-
-            }
-        cont++;
+            $scope.grp.grupos.push({
+                idgrupo: item.idgrupo,
+                nome: item.nome 
+            });            
     });
         console.log(result);
 
@@ -362,9 +348,9 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
         console.log(error);
     });
 
-    $scope.buscarLista = function (grupo) {
+    $scope.buscarLista = function (grupoSelecionado) {
 
-        $scope.grupo = grupo;
+        $scope.grupo = grupoSelecionado;
 
         $scope.vm = {
             produtos: []
@@ -382,8 +368,9 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
                         idgrupo: prod.idgrupo,
                         idamigo: prod.idamigo,
                         produto: prod.produto,
+                        imagem: prod.imagem,
                         dtinserido: prod.dtinserido,
-                        comprado: prod.comprado 
+                        comprado: prod.comprado
                     });                        
             })
         }, function (error) {
@@ -396,6 +383,32 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
         
     }
 
+    $scope.delItem = function (idpresente, grupoSelecionado) {
+                
+            $scope.idpresente = idpresente;
+            $scope.grupo = grupoSelecionado;
+
+            var req = {
+                method: 'DELETE',
+                url: 'http://localhost:8080/presentes/' + $rootScope.usuarioLogado + '/' + $scope.grupo + '/' + $scope.idpresente 
+            };
+
+            $http(req).then(function (result) {
+                $ionicPopup.alert({
+                    title: 'Amigos da Lu',
+                    template: result.data.message
+                })                                
+            }, function (error) {
+                $ionicPopup.alert({
+                    title: 'Cadastro Erro',
+                    template: 'Ocorreu algum erro (' + error.status + ')'
+                });                
+            });
+
+            $scope.buscarLista($scope.grupo);
+            
+        }
+
 
 }])
    
@@ -404,20 +417,43 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 
-	$scope.pesquisa = '';	
+	//Busca os grupos que participa
+    $scope.selec = {
+        grupos: []
+    };
+    var req = {
+        method: 'GET',
+        url: 'http://localhost:8080/grupos/' + '1' + '/amigo'/*,
+        headers: {
+            'Authorization': 'Bearer pedrocao',
+            'Cache-Control': 'no-cache'
+        }*/
+    }
 
-	$scope.grupo1 = [];
-    $scope.grupo2 = [];
-    $scope.grupo3 = [];
+    $http(req).then(function (result) {
+        result.data.forEach(function (item) {
+            $scope.selec.grupos.push({
+                idgrupo: item.idgrupo,
+                nome: item.nome,
+                exibir: false
+            });
+            
+        });
+        console.log(result);
+    }, function (error) {
+        console.log(error);
+    })
+
+    $scope.pesquisa = '';	
 
 	$scope.buscar = function (pesquisa) {
 
 	    $scope.pesquisa = pesquisa;
 
-	    $scope.vm = {
+	    $scope.vm = {            
 	        categoria: '',
 	        produtos: [],
-	        maisItems: true
+            grupos: $scope.selec.grupos
 	    };
 
 	    var width = 400;
@@ -438,85 +474,81 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 	        result.data.data.products.forEach(function (order) {
 	                $scope.vm.produtos.push({
 	                    categoria: order.mainCategory.name,
-	                    divSku: 'div_' + order.id,
-	                    mostrar: false,
+	                    sku: order.id,
+	                    mostrarGrp: false,
 	                    title: order.title,
                         price: order.price,
                         url: 'http://www.magazineluiza.com.br/' + order.url,
-	                    full_image: 'http://i.mlcdn.com.br/180x120/' + order.image
+	                    full_image: 'http://i.mlcdn.com.br/180x120/' + order.image                        
 	                });                        
 	        })
-
-	        //Busca os grupos que participa
-	        var req = {
-		        method: 'GET',
-		        url: 'http://localhost:8080/grupos/' + $rootScope.usuarioLogado + '/amigo'/*,
-		        headers: {
-		            'Authorization': 'Bearer pedrocao',
-		            'Cache-Control': 'no-cache'
-		        }*/
-		    }
-
-		    $http(req).then(function (result) {
-		    	var cont = 0;
-		        result.data.forEach(function (item) {                
-		        	if(cont == 0) {
-		        		$scope.grupo1.idgrupo = item.idgrupo;
-	                    $scope.grupo1.nome = item.nomeGrupo;
-	                    $scope.grupo2 = '';
-	                    $scope.grupo3 = '';
-		        	} else if(cont == 1) {
-		        		$scope.grupo2 = [];
-		        		$scope.grupo2.idgrupo = item.idgrupo;
-	                    $scope.grupo2.nome = item.nomeGrupo;
-	                    $scope.grupo3 = '';
-		        	} else {
-		        		$scope.grupo3 = [];
-		        		$scope.grupo3.idgrupo = item.idgrupo;
-	                    $scope.grupo3.nome = item.nomeGrupo;
-		        	}
-		        cont++;
-		    });
-		        console.log(result);
-
-		    }, function (error) {
-		        console.log(error);
-		    })
-	        
 	    }, function (error) {
 	        
-	        $scope.vm.maisItems = false;
-
 	        if (error.status === 404) {
 	            var alertPopup = $ionicPopup.alert({
 	                title: 'Pesquisa',
 	                template: 'Produto não encontrado'
 	            });
-	        }
-	        console.log(result);
+	        }	        
 	    });
 	};
 
-	$scope.exibeDiv = function (div){
+	$scope.exibeGrp = function (sku){
 		$scope.vm.produtos.forEach( function (prod) {
-			if(prod.divSku == div ) {
-				if(prod.mostrar == false) {
-					prod.mostrar = true;
+			if(prod.sku == sku ) {
+				if(prod.mostrarGrp == false) {
+					prod.mostrarGrp = true;
 				} else {
-					prod.mostrar = false;
-				}
+					prod.mostrarGrp = false;
+				}                
 			}
 		});
 	}
 
-	$scope.addItem = function (div, idgrupo){
-		$scope.vm.produtos.forEach( function (prod) {
-			if(prod.divSku == div ) {
-				var produto = div.replace('div_','');
+    $scope.addItem = function (nomegrupo, idgrupo, sku, title, full_image) {
 
-			}
-		});
-	}
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Amigos da Lu',
+            template: 'Deseja adicionar o item ao grupo ' + nomegrupo + '?'
+        });
+
+        $scope.nomerp = nomegrupo;
+        $scope.idgrp = idgrupo;
+        $scope.sku = sku;
+        $scope.title = title;
+        $scope.imagem = full_image;
+
+        confirmPopup.then(function (res, nomegrupo, idgrupo, sku, title, full_image) {
+            if (res) {
+                var req = {
+                    method: 'POST',
+                    url: 'http://localhost:8080/presentes/',/*,
+                    headers: {
+                        'Authorization': 'Bearer pedrocao',
+                        'Cache-Control': 'no-cache'
+                    }*/
+                    data: {
+                        idamigo: $rootScope.usuarioLogado,
+                        idgrupo: $scope.idgrp,
+                        idproduto: $scope.sku,
+                        produto: $scope.title,
+                        imagem: $scope.imagem
+                    }
+                }
+                $http(req).then(function (response) {
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Amigos da Lu',
+                        template: 'Presente adicionado com sucesso.'
+                    });
+                }, function (error) {
+                    console.log(error);
+                })
+            } else {
+                console.log('You are not sure');
+            }
+        });
+    }
+
 
 }])
    
@@ -524,14 +556,18 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
-
-
+    if($rootScope.usuarioLogado == null || $rootScope.usuarioLogado == '') {
+        location.href="#/index.html";
+    }
 }])
    
 .controller('menuCtrl', ['$scope', '$stateParams', '$rootScope', '$http', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
+    if($rootScope.usuarioLogado == null || $rootScope.usuarioLogado == '') {
+        location.href="#/index.html";
+    }
     
 }])
    
@@ -540,7 +576,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
 
-	$rootScope.usuarioLogado = 0;
+	$rootScope.usuarioLogado = null;
 	$scope.usuario =  '';
     $scope.password = '123';
 
@@ -654,7 +690,6 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup) {
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
 
-    $scope.idGrupo = $location.search().idGrp;
     $scope.txtFone = '';
 
     $scope.valMinimo = 0;
@@ -668,7 +703,7 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
 
         var req = {
             method: 'GET',
-            url: 'http://localhost:8080/membros/' +  $scope.idGrupo + '/grupo'/*,
+            url: 'http://localhost:8080/membros/' +  $location.search().idGrp + '/grupo'/*,
             headers: {
                 'Authorization': 'Bearer pedrocao',
                 'Cache-Control': 'no-cache'
@@ -696,13 +731,14 @@ function ($scope, $stateParams, $rootScope, $http, $ionicPopup, $location) {
 
         $scope.doRefresh = function() {
 
+            $scope.idGrupo;
             $scope.vm = {            
                 membros: []
             };
 
             var req = {
                 method: 'GET',
-                url: 'http://localhost:8080/membros/' +  $scope.idGrupo + '/grupo'/*,
+                url: 'http://localhost:8080/membros/' +  $location.search().idGrp + '/grupo'/*,
                 headers: {
                     'Authorization': 'Bearer pedrocao',
                     'Cache-Control': 'no-cache'

@@ -82,8 +82,8 @@ module.exports = {
       presente.create(req.body, res);
     });
 
-    app.delete('/presentes/:id/', function(req, res) {
-      presente.delete(req.params.id, res);
+    app.delete('/presentes/:ida/:idg/:idp', function(req, res) {
+      presente.delete(req.params.ida, req.params.idg, req.params.idp, res);
     });
 
     //Grupos

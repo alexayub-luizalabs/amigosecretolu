@@ -47,7 +47,7 @@ function Presente() {
 
   this.create = function(presente, res) {
     connection.acquire(function(err, con) {
-      con.query('call p_add_presente(?,?,?,@resultado)', [presente.idgrupo, presente.idamigo, presente.produto], function(err, result) {
+      con.query('call p_add_presente(?,?,?,?,?,@resultado)', [presente.idamigo, presente.idgrupo, presente.idproduto, presente.produto, presente.imagem], function(err, result) {
         con.release();
         if (err) {
           res.send({status: 1, message: 'Falha ao adicionar presente.' + err.message});
@@ -58,14 +58,14 @@ function Presente() {
     });
   };
   
-  this.delete = function(idg,ida,prod, res) {
+  this.delete = function(ida,idg,idp, res) {
     connection.acquire(function(err, con) {
-      con.query('call p_remove_presente(?,?,?,@resultado)', [idg,ida,prod], function(err, result) {
+      con.query('call p_remove_presente(?,?,?,@resultado)', [ida,idg,idp], function(err, result) {
         con.release();
         if (err) {
-          res.send({status: 1, message: 'Falha ao excluir lista.'});
+          res.send({status: 1, message: 'Falha ao excluir presente.'});
         } else {
-          res.send({status: 0, message: 'Lista excluida com sucesso.'});
+          res.send({status: 0, message: 'Presente excluida com sucesso.'});
         }
       });
     });

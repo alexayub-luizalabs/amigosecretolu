@@ -10,16 +10,17 @@
         <img src="{{prod.full_image}}">
         <h2positive><a href="{{prod.url}}">{{prod.title}}</a>
           <i class="icon ion-ios-information-outline"></i>          
-          <ion-option-button class="button-positive" ng-click="exibeDiv(prod.divSku)">Eu Quero</ion-option-button>          
+          <ion-option-button class="button-positive" ng-click="exibeGrp(prod.sku)">Eu Quero</ion-option-button>          
         </h2positive>
-        R$ {{prod.price}}
-        {{grupo1.nome}}
-        <div class="button-bar" id="{{prod.divSku}}" style="position: absolute;z-index: 150px;" ng-show="prod.mostrar">
-          <button id="listaDePresentes-button10" class="button button-positive  button-block" ng-show="grupo1 != ''" ng-click="addItem(prod.divSku, grupo1.idgrupo)">{{grupo1[0].nome}}</button>
-          <button id="listaDePresentes-button11" class="button button-positive  button-block" ng-show="grupo2 != ''" ng-click="addItem(prod.divSku, grupo2.idgrupo)">{{grupo2.nome}}</button>
-          <button id="listaDePresentes-button12" class="button button-positive  button-block" ng-show="grupo3 != ''" ng-click="addItem(prod.divSku, grupo3.idgrupo)">{{grupo3.nome}}</button>
-        </div>
+        R$ {{prod.price}}        
       </ion-item>
+      <ion-list id="grupos-list14" ng-repeat="grp in vm.grupos" ng-show="prod.mostrarGrp">
+          <ion-item class="item-thumbnail-left item-icon-right positive" id="grupos-list-item26">
+            <h2>Grupo: {{grp.nome}}
+              <ion-option-button class="button-positive" ng-click="addItem(grp.nome, grp.idgrupo, prod.sku, prod.title, prod.full_image)">Add</ion-option-button>          
+            </h2positive>
+          </ion-item>
+        </ion-list> 
     </ion-list>
   </ion-content>
 </ion-view>
