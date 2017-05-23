@@ -1,89 +1,61 @@
 angular.module('app.routes', [])
 
 .config(function($stateProvider, $urlRouterProvider) {
-  // Definição da tela que será exibida caso o usuário digite alguma url inválida
-  $urlRouterProvider.otherwise('/login');
 
+  // Ionic uses AngularUI Router which uses the concept of states
+  // Learn more here: https://github.com/angular-ui/ui-router
+  // Set up the various states which the app can be in.
+  // Each state's controller can be found in controllers.js
   $stateProvider
+    
   
-  .state('login', {
-    url: '/login',
-    templateUrl: 'templates/login.html',
-    controller: 'loginCtrl'
-  })
 
-  .state('menu', {
-    url: '/menu',
-    templateUrl: 'templates/menu.html',
-    abstract:true
-  })
-
-  .state('menu.cadastro', {
-    url: '/cadastro',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/cadastro.html',
-        controller: 'cadastroCtrl'
-      }
-    }
-  })
-
-  .state('menu.perfil', {
+      .state('menu.perfil', {
     url: '/perfil',
     views: {
-      'menuContent': {
+      'side-menu21': {
         templateUrl: 'templates/perfil.html',
         controller: 'perfilCtrl'
       }
     }
   })
 
+  .state('menu.mensagens', {
+    url: '/mensagens',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/mensagens.html',
+        controller: 'mensagensCtrl'
+      }
+    }
+  })
+
   .state('menu.grupos', {
-    cache: false,
     url: '/grupos',
     views: {
-      'menuContent': {
+      'side-menu21': {
         templateUrl: 'templates/grupos.html',
         controller: 'gruposCtrl'
       }
     }
   })
 
-  .state('cadastroDetalhe', {
-    url: '/cadastroDetalhe',
-    templateUrl: 'templates/cadastroDetalhe.html',
-    abstract:true
+  .state('menu.listaDePresentes', {
+    url: '/presentes',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/listaDePresentes.html',
+        controller: 'listaDePresentesCtrl'
+      }
+    }
   })
-  
+
   .state('menu.produtos', {
-    cache: false,
     url: '/produtos',
     views: {
-      'menuContent': {
+      'side-menu21': {
         templateUrl: 'templates/produtos.html',
         controller: 'produtosCtrl'
-      }
-    }
-  })
-
-  .state('menu.listas', {
-    cache: false,
-    url: '/listas',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/listas.html',
-        controller: 'listasCtrl'
-      }
-    }
-  })
-
-  .state('menu.mensagens', {
-    cache: false,
-    url: '/mensagens',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/mensagens.html',
-        controller: 'mensagensCtrl'
       }
     }
   })
@@ -91,24 +63,39 @@ angular.module('app.routes', [])
   .state('menu.sobre', {
     url: '/sobre',
     views: {
-      'menuContent': {
+      'side-menu21': {
         templateUrl: 'templates/sobre.html',
         controller: 'sobreCtrl'
-      }  
+      }
     }
   })
 
-  .state('menu.adicionarProduto', {
-    url: '/adicionarproduto',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/adicionarProduto.html',
-        controller: 'addProdutoCtrl'
-      }  
-    }
+  .state('menu', {
+    url: '/menu',
+    templateUrl: 'templates/menu.html',
+    controller: 'menuCtrl'
   })
 
-  .state('sair', {
-    url: '/sair'
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'loginCtrl'
   })
+
+  .state('cadastreSe', {
+    url: '/cadastro',
+    templateUrl: 'templates/cadastreSe.html',
+    controller: 'cadastreSeCtrl'
+  })
+
+  .state('membros', {
+    url: '/membros',
+    templateUrl: 'templates/membros.html',
+    controller: 'membrosCtrl'
+  })
+
+$urlRouterProvider.otherwise('/login')
+
+  
+
 });

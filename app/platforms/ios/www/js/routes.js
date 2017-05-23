@@ -40,6 +40,16 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('menu.listaDePresentes', {
+    url: '/presentes',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/listaDePresentes.html',
+        controller: 'listaDePresentesCtrl'
+      }
+    }
+  })
+
   .state('menu.produtos', {
     url: '/produtos',
     views: {
@@ -66,7 +76,25 @@ angular.module('app.routes', [])
     controller: 'menuCtrl'
   })
 
-$urlRouterProvider.otherwise('/menu/perfil')
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'loginCtrl'
+  })
+
+  .state('cadastreSe', {
+    url: '/cadastro',
+    templateUrl: 'templates/cadastreSe.html',
+    controller: 'cadastreSeCtrl'
+  })
+
+  .state('membros', {
+    url: '/membros',
+    templateUrl: 'templates/membros.html',
+    controller: 'membrosCtrl'
+  })
+
+$urlRouterProvider.otherwise('/login')
 
   
 

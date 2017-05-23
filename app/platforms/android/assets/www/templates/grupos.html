@@ -1,28 +1,20 @@
-<ion-view title="Grupos">
-    <ion-nav-buttons side="right">
-        
-    </ion-nav-buttons>
-    <ion-content padding="true" class="has-header bg-padrao">
-        <br>        
-        
-        <input type="search" placeholder="Nome do grupo" id='txtPesq' ng-model="nomeGrupo">
-        <input type="button" value='Novo Grupo' class="has-header bg-padrao" ng-show="nomeGrupo != ''" ng-click="criarGrupo(nomeGrupo)">
+<ion-view title="Grupos" id="page9">
+  <ion-content padding="true" class="has-header">
+    <form id="grupos-form5" class="list">
+      <label class="item item-input" id="grupos-text" name="txtGrupo">
+        <span class="input-label"></span><input type="text" placeholder="Nome do Grupo" ng-model="nomeGrupo"></label>
+    </form>
+    <button id="grupos-button4" class="button button-positive  button-block" ng-show="nomeGrupo!=''" ng-click="criarGrupo(nomeGrupo)">Criar Grupo</button>
+    <ion-list id="grupos-list13">
+      <ion-item class="item-thumbnail-left positive" id="grupos-list-item25" ng-repeat="grupo in vm.grupos">
+        <h2positive>{{grupo.nome}}
+          <ion-option-button class="button-royal" ng-click="aceitar(grupo.idgrupo)" ng-show="grupo.inserido=='N'">Entrar</ion-option-button>
+          <ion-option-button class="button-assertive" ng-click="cancelar(grupo.idgrupo)" ng-show="grupo.inserido=='N'">Não Aceitar</ion-option-button>
 
-        </br>
-        <ion-list can-swipe="true">            
-            <ion-item class="item-thumbnail-left positive" ng-repeat="grupo in vm.grupos" class="item-button-right">
-                <h2>{{grupo.grupo}}</h2>
-                <p>{{grupo.datacriacao}}</p>
-                <br/>
-                <i style="float:right" class="icon ion-chevron-right icon-accessory balanced">  </i>
-
-                <i class="icon ion-checkmark-circled balanced" ng-hide="!produto.added"></i>
-                <ion-option-button class="button-positive" ng-click="getMembros({{grupo.idgrupo}})">
-                    Membros
-                </ion-option-button>
-                
-            </ion-item>
-        </ion-list>        
-    </ion-content>
+          <ion-option-button class="button-royal" ng-click="getMembros(grupo.idgrupo)" ng-show="grupo.inserido=='S'">Participantes</ion-option-button>
+          <ion-option-button class="button-assertive" ng-click="delGrupo(grupo.idgrupo, grupo.nome)" ng-show="{{grupo.isadmin}}">Excluir</ion-option-button>
+        </h2positive>
+      </ion-item>
+    </ion-list>
+  </ion-content>
 </ion-view>
-<i class="icon ion-chevron-right icon-accessory"></i>

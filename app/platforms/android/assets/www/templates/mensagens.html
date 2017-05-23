@@ -1,29 +1,23 @@
-<ion-view title="Mensagens">
-    <ion-nav-buttons side="right">
-        
-    </ion-nav-buttons>
-    <ion-content padding="true" class="has-header bg-padrao">
-        <br>        
-        
-        <input type="search" placeholder="Nome do grupo" id='txtPesq' ng-model="nomeGrupo">
-        <input type="button" value='Novo Grupo' class="has-header bg-padrao" ng-show="nomeGrupo != ''" ng-click="criarGrupo(nomeGrupo)">
-
-        </br>
-        <ion-list can-swipe="true">
-            <ion-item class="item-thumbnail-left positive" ng-repeat="grupo in vm.grupos" class="item-button-right">                
-                <h2>{{grupo.grupo}}</h2>
-                <p>{{grupo.datacriacao}}</p>
-                <br/>
-                <i style="float:right" class="icon ion-chevron-right icon-accessory balanced">  </i>
-
-                <i class="icon ion-checkmark-circled balanced" ng-hide="!produto.added"></i>
-
-                <ion-option-button class="button-positive" ng-click="getMembros()" ng-show="!produto.added">
-                    Membros
-                </ion-option-button>
-                
-            </ion-item>
-        </ion-list>        
-    </ion-content>
+<ion-view title="Mensagens" id="page8">
+  <ion-content padding="true" class="has-header">  
+    <div class="button-bar">
+      <button id="msg-button10" class="button button-positive  button-block" ng-click="enviadas()">ENVIADAS</button>
+      <button id="msg-button11" class="button button-positive  button-block" ng-click="recebidas()">RECEBIDAS</button>
+    </div>
+    <ion-list id="mensagens-list3" ng-repeat="msg in vm.mensagens | groupBy: iddestinatario">
+      <ion-item class="item-thumbnail-left positive" id="mensagens-list-item9">
+        <h2positive>Para: {{msg.amigo}}
+          <ion-option-button class="button-calm" ng-click="showMsg()">Ler</ion-option-button>
+          <ion-option-button class="button-assertive" ng-click="delMsg(msg.idmensagem)">Excluir</ion-option-button>
+        </h2positive>
+      </ion-item>
+    </ion-list>
+    
+    <div class="spacer" style="width: 300px; height: 184px;"></div>
+    <form id="mensagens-form7" class="list">
+      <label class="item item-input" id="mensagens-input12" name="txtMsg">
+        <input type="text" placeholder="">
+      </label>
+    </form>
+  </ion-content>
 </ion-view>
-<i class="icon ion-chevron-right icon-accessory"></i>
