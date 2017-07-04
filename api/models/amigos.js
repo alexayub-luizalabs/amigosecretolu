@@ -2,15 +2,6 @@ var connection = require('../connection');
 
 function Amigo() {
   
-  this.get = function(res) {
-    connection.acquire(function(err, con) {
-      con.query('select nome, email, senha, celular, foto, dtcadastro from amigos', function(err, result) {
-        con.release();
-        res.send(result);
-      });
-    });
-  };
-
   this.create = function(amigo, res) {
     connection.acquire(function(err, con) {
       con.query('call p_insere_amigo(?,?,?,?,?, @resultado)', [amigo.nome,amigo.senha,amigo.email,amigo.celular,amigo.foto], function(err, result) {
@@ -26,7 +17,7 @@ function Amigo() {
   
   this.getAmigoPorId = function(id, res) {
     connection.acquire(function(err, con) {
-      con.query("select a.idamigo, a.nome, a.senha, a.email, a.celular, a.dtcadastro, (select count(*) from amigos_grupos ag where ag.celular = a.celular) as qtdgrupo from amigos a where a.idamigo = ?",[id], function(err, result) {
+      con.query("call p_amigos_get(?)",[id], function(err, result) {
         con.release();
         if(err) {
           res.send({status: 1, message: 'Amigo não encontrado.'});
